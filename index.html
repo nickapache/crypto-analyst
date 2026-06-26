@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#070a12;--card:#0c1018;
+  --gold:#d4af6a;--navy:#3b5a7e;--slate:#64748b;
+  --green:#3ba87a;--violet:#7c7ce0;
+  --border:rgba(212,175,106,0.14);--text:#dde3ec;--muted:#4d5868
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+.hero{position:relative;padding:5rem 2rem 3.5rem;text-align:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 140% 70% at 50% -10%,rgba(212,175,106,0.08) 0%,rgba(59,90,126,0.08) 45%,transparent 70%)}
+.grid-pat{position:absolute;inset:0;background-image:linear-gradient(rgba(212,175,106,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,106,0.02) 1px,transparent 1px);background-size:42px 42px;pointer-events:none}
+.hero h1{font-size:clamp(2.8rem,7vw,4.8rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;background:linear-gradient(135deg,#fff 25%,#e8d5a8 60%,var(--gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.6rem}
+.hero-role{font-size:1rem;color:var(--muted);margin-bottom:.5rem;font-weight:500}
+.hero-tagline{font-size:1.15rem;font-weight:500;color:#9baab8;max-width:660px;margin:0 auto 2rem;line-height:1.6}
+.hero-tagline em{color:var(--gold);font-style:normal}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tc{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);color:#6b7d8e;border-radius:6px;font-size:12px;font-weight:500;padding:4px 12px}
+.tc.hi{border-color:rgba(212,175,106,0.32);color:var(--gold);background:rgba(212,175,106,0.06)}
+.tc.hi2{border-color:rgba(59,90,126,0.4);color:#8fa9c4;background:rgba(59,90,126,0.1)}
+.tc.hi3{border-color:rgba(124,124,224,0.32);color:var(--violet);background:rgba(124,124,224,0.06)}
+
+.statbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));background:#090c14;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat{padding:1.3rem .8rem;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.sn{display:block;font-size:1.8rem;font-weight:800;line-height:1;background:linear-gradient(135deg,var(--gold),#8fa9c4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px}
+
+.callout{max-width:820px;margin:3rem auto;padding:1.8rem 2rem;background:rgba(212,175,106,0.04);border:1px solid rgba(212,175,106,0.15);border-radius:14px;text-align:center}
+.callout-label{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem}
+.callout p{font-size:1rem;color:#8ba0b2;line-height:1.7}
+.callout strong{color:var(--text);font-weight:600}
+
+.sec{padding:2.5rem 2rem;max-width:1100px;margin:0 auto}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid rgba(212,175,106,0.08)}
+.si{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.si-gold{background:rgba(212,175,106,0.1)}
+.si-navy{background:rgba(59,90,126,0.15)}
+.si-violet{background:rgba(124,124,224,0.1)}
+.si-green{background:rgba(59,168,122,0.1)}
+.sh-title{font-size:1.15rem;font-weight:700;color:#fff}
+.sh-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.divider{height:1px;background:rgba(212,175,106,0.06)}
+
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.3rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(212,175,106,0.28);transform:translateY(-2px)}
+.ct{position:absolute;top:0;left:0;right:0;height:2px}
+.ct-gold{background:linear-gradient(90deg,var(--gold),#a8854a)}
+.ct-navy{background:linear-gradient(90deg,var(--navy),#1f3a52)}
+.ct-violet{background:linear-gradient(90deg,var(--violet),#5252b8)}
+.ct-green{background:linear-gradient(90deg,var(--green),#1f6b4d)}
+.cpub{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:var(--muted)}
+.d{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.d-dl{background:var(--green)}.d-tb{background:#8fa9c4}.d-ct{background:var(--gold)}
+.card h3{font-size:14px;font-weight:600;color:#dde3ec;line-height:1.4;margin-bottom:8px}
+.card p{font-size:12px;color:var(--muted);line-height:1.6}
+.cfoot{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.chip{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em}
+.ch-gold{background:rgba(212,175,106,0.1);color:var(--gold)}
+.ch-navy{background:rgba(59,90,126,0.15);color:#8fa9c4}
+.ch-violet{background:rgba(124,124,224,0.1);color:var(--violet)}
+.ch-green{background:rgba(59,168,122,0.1);color:var(--green)}
+.clink{font-size:11px;color:#2d3f50;text-decoration:none}
+.clink:hover{color:var(--gold)}
+
+.feature{background:linear-gradient(135deg,#0d1018 0%,#0a0d14 100%);border:1px solid rgba(212,175,106,0.22);border-radius:14px;padding:1.8rem;position:relative;overflow:hidden;margin-bottom:14px}
+.feature::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(212,175,106,0.06),transparent 70%);pointer-events:none}
+.feat-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.feature h3{font-size:1.05rem;font-weight:700;color:#fff;line-height:1.4;margin-bottom:10px}
+.feature p{font-size:13px;color:#5a6e80;line-height:1.65}
+.feat-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.feat-tag{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:#7a9db5}
+
+.sample{background:var(--card);border:1px solid rgba(212,175,106,0.13);border-radius:12px;padding:1.5rem;margin-bottom:12px;position:relative}
+.sample::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--gold),var(--navy));border-radius:2px 0 0 2px}
+.sample-label{font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
+.sample blockquote{font-size:14px;color:#c0cfe0;line-height:1.7;font-style:italic;padding-left:1rem}
+.sample .attrib{font-size:11px;color:var(--muted);margin-top:.7rem;padding-left:1rem}
+
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:1.5rem}
+.hl{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:1.2rem;display:flex;gap:12px}
+.chk{width:26px;height:26px;border-radius:6px;background:rgba(212,175,106,0.1);border:1px solid rgba(212,175,106,0.25);color:var(--gold);font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.hl h4{font-size:13px;font-weight:600;color:#dde3ec;margin-bottom:4px}
+.hl p{font-size:12px;color:var(--muted);line-height:1.5}
+
+.close{max-width:740px;margin:3rem auto;padding:2.5rem;background:linear-gradient(135deg,#0d1018,#0a0d16);border:1px solid rgba(212,175,106,0.2);border-radius:16px;text-align:center;position:relative;overflow:hidden}
+.close::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(212,175,106,0.05),transparent 70%)}
+.close h2{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:.8rem}
+.close p{font-size:.95rem;color:#5a6e80;line-height:1.7;margin-bottom:1.5rem}
+.tag-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.ctag{display:inline-flex;align-items:center;gap:5px;background:rgba(212,175,106,0.06);border:1px solid rgba(212,175,106,0.2);color:#d9c499;border-radius:6px;font-size:12px;font-weight:600;padding:3px 10px}
+
+.footer{background:#05070d;border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
+.fn{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:4px}
+.fr{font-size:13px;color:#2d3f50;margin-bottom:2rem}
+.cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#a8854a,#3b5a7e);color:#fff;padding:13px 30px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:2rem;transition:opacity .2s}
+.cta:hover{opacity:.85}
+.contacts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:1.5rem}
+.cbtn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);color:#6b7d8e;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;transition:all .2s}
+.cbtn:hover{border-color:rgba(212,175,106,0.4);color:var(--gold)}
+.cbtn.li{background:#0a66c2;border-color:#0a66c2;color:#fff}
+.pub-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.pub-links a{font-size:12px;color:#2d3f50;text-decoration:none}
+.pub-links a:hover{color:var(--gold)}
+a{text-decoration:none;color:inherit}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-pat"></div>
+  <h1>Osato Avan-Nomayo</h1>
+  <p class="hero-role">DeFi Correspondent · On-chain Researcher · Crypto Markets Analyst</p>
+  <p class="hero-tagline">Ten years reading <em>tokenomics, treasuries, and protocol design</em> for a living, and writing about what he finds with the kind of rigour an investment committee would expect.</p>
+  <div class="tag-cloud">
+    <span class="tc hi">🔍 On-chain Due Diligence</span>
+    <span class="tc hi">📐 Tokenomics Analysis</span>
+    <span class="tc hi2">🗺️ Sector and Market Mapping</span>
+    <span class="tc hi2">💰 Venture and Deal Coverage</span>
+    <span class="tc hi3">🏛️ DAO Governance Mechanics</span>
+    <span class="tc hi3">📊 Etherscan · Nansen</span>
+    <span class="tc">✍️ 7 yrs Journalism</span>
+    <span class="tc">🌍 10 yrs Web3</span>
+    <span class="tc">⚗️ Chemical Engineering</span>
+  </div>
+</div>
+
+<!-- STAT BAR -->
+<div class="statbar">
+  <div class="stat"><span class="sn">3,000+</span><span class="sl">Articles Published</span></div>
+  <div class="stat"><span class="sn">2wks</span><span class="sl">Early on Terra Collapse</span></div>
+  <div class="stat"><span class="sn">$150M+</span><span class="sl">Funding Rounds Covered</span></div>
+  <div class="stat"><span class="sn">10+</span><span class="sl">DAO Treasury Stories</span></div>
+  <div class="stat"><span class="sn">2</span><span class="sl">Top-5 Block Stories</span></div>
+  <div class="stat"><span class="sn">10</span><span class="sl">Years in Web3</span></div>
+</div>
+
+<!-- INTRO -->
+<div class="callout" style="margin:3rem 2rem">
+  <div class="callout-label">What Carries Over From the Newsroom to the Investment Committee</div>
+  <p>A journalist who covers DeFi well is already doing a version of diligence work. Read the team, the token design, and the treasury. Form a view before anyone else has one. Write it down clearly enough that a stranger can follow the logic. Osato has been doing exactly that for a decade, just without the word "memo" attached to it. <strong>The discipline is the same. The output just needs a different header.</strong></p>
+</div>
+
+<div class="divider"></div>
+
+<!-- TERRA LUNA AS DUE DILIGENCE -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-gold">🧾</div>
+    <div>
+      <div class="sh-title">A Due Diligence Call That Beat the Market by Two Weeks</div>
+      <div class="sh-sub">The clearest example of forming an independent risk thesis and being right before the consensus caught up.</div>
+    </div>
+  </div>
+  <div class="feature">
+    <div class="feat-label">🏆 The Block · 2022 · One of the Block's all-time top-5 most-read stories</div>
+    <h3>He flagged structural risk in UST's reserve mechanism two weeks before $45 billion evaporated</h3>
+    <p>Most coverage of Terra's collapse came after the fact. Osato's didn't. Working from the mechanics of how UST maintained its dollar peg, the size of the Anchor Protocol subsidy keeping yield artificially high, and the thinness of the reserves actually backing the system, he formed a view that the structure was fragile well before the market priced that in. He published the thesis. Fourteen days later, the peg broke and the Terra ecosystem lost $45 billion in value. This is fundamental due diligence on a protocol's reserve design, a risk assessment grounded in mechanism rather than sentiment, and a thesis that was published, dated, and proven right. It is also why the story remains one of the five most-read pieces in The Block's history.</p>
+    <div class="feat-tags">
+      <span class="feat-tag">📋 Reserve mechanism diligence</span>
+      <span class="feat-tag">⚠️ Risk thesis published ahead of consensus</span>
+      <span class="feat-tag">🏆 Top-5 Block story all-time</span>
+      <span class="feat-tag">📐 Tokenomics-driven analysis</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ON-CHAIN RESEARCH -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-navy">⛓️</div>
+    <div>
+      <div class="sh-title">On-chain Research, Done Himself</div>
+      <div class="sh-sub">His own professional profile lists Etherscan and Nansen as working tools, not buzzwords. Here is that work in practice.</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct ct-navy"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2026</div>
+      <h3>Gitcoin DAO loses $500,000 in GTC tokens to a treasury execution error</h3>
+      <p>Osato pulled the transaction directly from Etherscan, showing 521,436 GTC sent to the protocol's own contract address instead of the intended multisig wallet. He traced the governance vote that authorised the spend, found the human error in execution, and got the protocol's own contributor on record calling it a lesson for the wider DAO ecosystem. This is raw block-explorer verification, not a rewritten press release.</p>
+      <div class="cfoot"><span class="chip ch-navy">Etherscan-verified · Treasury Error</span><a href="https://www.dlnews.com/articles/defi/gitcoin-tokens-worth-500k-usd-lost-forever-over-dao-mistake/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-navy"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Balancer's $128 million exploit kept spreading across 27 forks despite multiple audits</h3>
+      <p>Osato tracked the attacker's wallet directly, identified that it was still active rather than dormant, and flagged 27 vulnerable forks across multiple chains before the full scope of the exploit was publicly understood. Live wallet monitoring, not a summary of someone else's incident report.</p>
+      <div class="cfoot"><span class="chip ch-navy">Live Wallet Tracking</span><a href="https://www.dlnews.com/articles/defi/balancer-suffers-128m-exploit-despite-multiple-audits/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-navy"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Rebuilding the $220 million Cetus exploit from the chain data, step by step</h3>
+      <p>He reconstructed the full attack path independently: the fake token mechanism, the cross-chain bridge to Ethereum, the conversion to USDC, and the $37 million still sitting in a traceable wallet. A walk-through built from the data itself, not from Cetus's own account of what happened.</p>
+      <div class="cfoot"><span class="chip ch-navy">Fund Tracing · Cross-chain</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-navy"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Nomad Bridge's $190 million exploiter, traced through 88 copycat wallets</h3>
+      <p>Working from Coinbase's on-chain data after the original 2022 exploit, Osato mapped 88 distinct wallet addresses that drained $88 million through the same vulnerability, and separated which ones returned funds from which didn't. He closed the loop years later when the original exploiter was arrested.</p>
+      <div class="cfoot"><span class="chip ch-navy">Wallet Mapping · Fund Behaviour</span><a href="https://www.dlnews.com/articles/defi/hacker-behind-190m-nomad-bridge-exploit-arrested-in-israel/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-navy"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Yearn Finance's $9 million infinite mint, tracked to Tornado Cash before the team confirmed it</h3>
+      <p>Osato explained the maths bug behind the exploit, then followed the stolen funds onchain to a Tornado Cash deposit, publishing the trace before Yearn's own post-mortem went live.</p>
+      <div class="cfoot"><span class="chip ch-navy">Fund Tracing · Pre-confirmation</span><a href="https://www.dlnews.com/articles/defi/yearn-finance-looted-for-9m-after-attacker-minted-trillions/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-navy"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Did North Korean hackers hit Upbit for $36 million? The acquisition timing said yes before anyone confirmed it</h3>
+      <p>He connected the hack's timing to Naver's $10 billion acquisition of Upbit's parent company, raising the Lazarus Group link from circumstantial pattern-matching well before it became the accepted explanation.</p>
+      <div class="cfoot"><span class="chip ch-navy">Pattern Analysis · Attribution</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TOKENOMICS AND GOVERNANCE -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-violet">📐</div>
+    <div>
+      <div class="sh-title">Tokenomics and Governance Mechanics</div>
+      <div class="sh-sub">At The Block, his beat was officially DAO governance, staking, and blockchain layers. This is what that looked like in practice.</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct ct-violet"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Polkadot caps its total token supply at 2.1 billion, ending years of unlimited issuance</h3>
+      <p>Osato explained why a DAO would vote to cap supply on a network that was down 93 percent from its highs, what that does to the existing dilution thesis, and why 81 percent of voting participants backed the change.</p>
+      <div class="cfoot"><span class="chip ch-violet">Supply Mechanics · DAO Vote</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-violet"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Compound DAO rejects a $13 million clawback of delegate tokens</h3>
+      <p>A $4 billion lending protocol's whales voted down a proposal to reverse a prior governance incentive allocation. Osato explained the original delegate programme, why it became controversial, and what the failed clawback signals about how entrenched a governance design can become once tokens are distributed.</p>
+      <div class="cfoot"><span class="chip ch-violet">Governance Incentives</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-violet"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Inverse Finance plugs a bad debt hole by betting its own token's future against it</h3>
+      <p>Osato got founder Nour Haridy on record explaining a deliberate trade-off: betting the Inverse token's long-term value against an immediate liability. He laid out exactly what that trade-off implied for token holders and why the DAO chose it over alternatives.</p>
+      <div class="cfoot"><span class="chip ch-violet">Founder Interview · Risk Trade-off</span><a href="https://www.dlnews.com/articles/defi/inverse-finance-lures-defi-investors-to-plug-bad-debt/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- RAGE QUITS AS GOVERNANCE ECONOMICS -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-violet">⚡</div>
+    <div>
+      <div class="sh-title">Rage Quits and Treasury Disputes</div>
+      <div class="sh-sub">What happens when token holders and founding teams disagree on how a treasury should be spent.</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct ct-violet"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2023</div>
+      <h3>The definitive explainer on why rage quitting became DeFi's defining governance trend</h3>
+      <p>Osato mapped the mechanics across six cases, including Rook DAO's $20 million settlement and Fei Protocol's $220 million liquidation, explaining the activist investor playbook that targets the gap between a protocol's token price and its treasury value, and how founding teams adapted in response.</p>
+      <div class="cfoot"><span class="chip ch-violet">Governance Playbook · 6 Cases</span><a href="https://www.dlnews.com/articles/defi/what-is-rage-quitting-and-why-has-it-become-so-popular/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-violet"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2023</div>
+      <h3>Concave Finance's activist raid ends in a $2 million payout, then a smart contract bug botches it</h3>
+      <p>Osato got both the activist and the team on record: one calling it "looking for an edge in the game," the other blaming "poor code and poor communication." He used the dispute to illustrate how thin the line is between aggressive governance arbitrage and outright treasury extraction.</p>
+      <div class="cfoot"><span class="chip ch-violet">Activist Investors · Treasury Arbitrage</span><a href="https://www.dlnews.com/articles/defi/concave-finance-settles-with-dao-raiders-with-2-million-usd/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- VENTURE AND DEAL COVERAGE -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-green">💰</div>
+    <div>
+      <div class="sh-title">Funding Rounds and Deal Economics</div>
+      <div class="sh-sub">Reading term structures, lead investors, and the full lifecycle of a deal, from raise to write-down.</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct ct-green"></div>
+      <div class="cpub"><span class="d d-tb"></span> The Block · 2021</div>
+      <h3>SoftBank leads a $150 million Series B into Zepeto, with HYBE following for $41 million</h3>
+      <p>Osato decoded the round structure, the lead-versus-follow investor dynamics, and what a $1 billion-plus valuation implied for a metaverse platform's growth assumptions at the time.</p>
+      <div class="cfoot"><span class="chip ch-green">Series B · Lead/Follow Structure</span><a href="https://www.theblock.co/linked/125763/softbank-invests-150-million-in-south-korean-metaverse-platform-zepeto" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-green"></div>
+      <div class="cpub"><span class="d d-tb"></span> The Block · 2021</div>
+      <h3>Enjin deploys a $100 million ecosystem fund on top of an earlier $18.9 million Crypto.com-led round</h3>
+      <p>He tracked the full capital stack from seed through to fund deployment strategy, explaining how an ecosystem fund differs from a direct investment and what it signals about a platform's growth thesis.</p>
+      <div class="cfoot"><span class="chip ch-green">Ecosystem Fund · Capital Stack</span><a href="https://www.theblock.co/amp/post/123271/enjin-floats-100m-efinity-metaverse-fund-to-boost-nft-marketplace" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-green"></div>
+      <div class="cpub"><span class="d d-tb"></span> The Block · 2023</div>
+      <h3>A post-mortem on Formfunction, which shut down a year after raising $4.7 million in seed funding</h3>
+      <p>Most coverage stops at the raise. Osato followed through to the failure, asking what a well-funded NFT platform's closure says about market timing risk versus product risk, the kind of question a diligence process should ask before the cheque clears, not after.</p>
+      <div class="cfoot"><span class="chip ch-green">Seed Round Failure Analysis</span><a href="https://www.theblock.co/post/220792/solana-based-nft-website-formfunction-to-shut-down-on-march-29" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- MARKET MAPPING -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-gold">🗺️</div>
+    <div>
+      <div class="sh-title">Sector Mapping Across DeFi and Stablecoins</div>
+      <div class="sh-sub">Placing individual stories inside a wider competitive picture of who is winning a given vertical and why.</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct ct-gold"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Tether enters the US stablecoin market with USAT, well behind Circle's head start</h3>
+      <p>Osato laid the two issuers side by side: market position, regulatory posture, and distribution advantage, framing a single product launch as a competitive positioning story inside the wider stablecoin sector.</p>
+      <div class="cfoot"><span class="chip ch-gold">Competitive Positioning</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-gold"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Ethereum's stablecoin supply grows $17 billion in a month, outpacing every rival chain combined</h3>
+      <p>Working from Artemis data, he sized Ethereum's share of the stablecoin market against every competing chain at once, the kind of comparative sizing exercise that sits underneath any competitive map of the sector.</p>
+      <div class="cfoot"><span class="chip ch-gold">Market Sizing · Chain Comparison</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-gold"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Maple Finance's assets under management overtake BlackRock's BUIDL fund</h3>
+      <p>He positioned a single lending protocol's growth against a benchmark from traditional finance, the same comparative instinct a market map needs: knowing which numbers a founder's pitch should be measured against.</p>
+      <div class="cfoot"><span class="chip ch-gold">Benchmarking · TradFi Comparison</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- RESEARCH WORKFLOW -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-navy">📡</div>
+    <div>
+      <div class="sh-title">A Sourcing System Built Before It Was Asked For</div>
+      <div class="sh-sub">His own newsroom wrote a feature about how he finds stories. The same habits generate deal flow just as well as news flow.</div>
+    </div>
+  </div>
+  <div class="feature" style="border-color:rgba(124,124,224,0.2)">
+    <div class="feat-label" style="color:var(--violet)">📋 Newsroom Feature · DL News</div>
+    <h3>His editors profiled his own research method because it was distinctive enough to write about</h3>
+    <p>Osato maintains a daily habit of reading governance forums across every DAO he covers, the same way a beat reporter reads committee filings. He follows official Discord servers and the unofficial ones that spring up when a team tries to control the narrative. He treats crypto Twitter as a primary source for tracking which builders, founders, and on-chain researchers are worth following closely, not as a feed to scroll. The output of that habit is a stream of early signal: which protocols are quietly in trouble, which founders are shipping something worth a second look, and which narratives are forming before they have a name. That is a sourcing pipeline. It currently produces news leads. It would produce deal leads just as easily.</p>
+    <div class="feat-tags">
+      <span class="feat-tag">📋 Daily governance forum monitoring</span>
+      <span class="feat-tag">💬 Discord and community embeds</span>
+      <span class="feat-tag">🐦 Crypto Twitter as primary source</span>
+      <span class="feat-tag">⛓️ On-chain data as verification layer</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WRITING SAMPLES -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-gold">✍️</div>
+    <div>
+      <div class="sh-title">A Few Lines From the Actual Research</div>
+      <div class="sh-sub">Structured, specific, and built around a clear claim rather than a vibe.</div>
+    </div>
+  </div>
+  <div class="sample">
+    <div class="sample-label">On a governance vote and its real implication</div>
+    <blockquote>The community behind Polkadot, the $6.3 billion blockchain founded by Gavin Wood, has just moved to cap the total amount of tokens the network will ever dish out. The measure passed with an 81% approval among voting participants.</blockquote>
+    <p class="attrib">States the decision, the scale of the network it affects, and the exact margin of approval, in two sentences.</p>
+  </div>
+  <div class="sample">
+    <div class="sample-label">On a deliberate financial trade-off</div>
+    <blockquote>The deal effectively means investors are betting that the Inverse token's long-term growth potential can cover the bad debt liability, and the DAO proposal for the move did not hide this trade-off.</blockquote>
+    <p class="attrib">Names the bet being made and credits the protocol for being explicit about the risk rather than burying it.</p>
+  </div>
+  <div class="sample">
+    <div class="sample-label">On a fund deployment compared against its origin</div>
+    <blockquote>On-chain data from Etherscan shows 521,436 GTC tokens sent from Gitcoin's treasury to the protocol's contract address. The fund transfer came after an on-chain governance vote in early September.</blockquote>
+    <p class="attrib">Leads with the verified data source, then connects it back to the governance decision that authorised the spend.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- HIGHLIGHTS -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-gold">✅</div>
+    <div>
+      <div class="sh-title">Highlights</div>
+      <div class="sh-sub">What carries over directly into a venture analyst seat.</div>
+    </div>
+  </div>
+  <div class="hl-grid">
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He forms an independent view before consensus arrives</h4>
+        <p>The Terra Luna call is the clearest case, but the instinct shows up again in the Upbit attribution and the Balancer fork warning. He doesn't wait for a press release to publish a position.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He reads tokenomics as a structural question, not a price chart</h4>
+        <p>Polkadot's supply cap, Compound's delegate clawback, and Inverse Finance's bad debt bet all required understanding what a token design actually does under stress, not just what it's called.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He follows deals through their full lifecycle</h4>
+        <p>SoftBank's investment into Zepeto and Formfunction's collapse a year after its seed round both get covered, not just the headline raise. That full-cycle view is exactly what a diligence process needs.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He verifies on-chain rather than repeating a team's account</h4>
+        <p>Etherscan data on Gitcoin's treasury, live wallet tracking on Balancer, fund tracing on Yearn and Nomad Bridge. The habit of checking the chain before writing is already there.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He has a research workflow that already looks like sourcing</h4>
+        <p>Daily governance forum monitoring, Discord embeds, and crypto Twitter tracking built a pipeline of early signal long before anyone called it deal flow.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He writes clearly enough that a non-specialist can follow the argument</h4>
+        <p>Every piece above states a claim, gives the evidence, and states the implication, in that order. That structure is most of what a good memo needs from its prose.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSE -->
+<div class="close" style="margin:3rem 2rem">
+  <h2>The instincts are already there</h2>
+  <p>He has spent a decade forming views on protocols, checking those views against the chain, and writing them down clearly enough for strangers to follow. He called Terra's structural weakness before the market did. He reads a DAO's governance forum the way an analyst reads a cap table. He has followed funding rounds from term sheet to shutdown. None of that is framed as venture work in his published archive, because it wasn't written for that purpose. The underlying discipline is the same one this role asks for.</p>
+  <div class="tag-wrap">
+    <span class="ctag">On-chain Due Diligence</span>
+    <span class="ctag">Tokenomics Analysis</span>
+    <span class="ctag">Market Mapping</span>
+    <span class="ctag">Deal Lifecycle Coverage</span>
+    <span class="ctag">Governance Mechanics</span>
+    <span class="ctag">Structured Research Writing</span>
+    <span class="ctag">Independent Thesis Formation</span>
+    <span class="ctag">Founder-level Sourcing</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="fn">Osato Avan-Nomayo</div>
+  <div class="fr">DeFi Correspondent · DL News &nbsp;|&nbsp; formerly The Block · CoinTelegraph · BeInCrypto · Bitcoinist</div>
+  <a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="cta">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Full Portfolio on Muckrack
+  </a>
+  <div class="contacts">
+    <a href="tel:+2348111571785" class="cbtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.55 3.18 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.7a16 16 0 0 0 6.4 6.4l1.06-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      +234 811 157 1785
+    </a>
+    <a href="mailto:sato.nomayo@gmail.com" class="cbtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      sato.nomayo@gmail.com
+    </a>
+    <a href="http://www.linkedin.com/in/osato-avan-nomayo-a6308b171" target="_blank" class="cbtn li">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      LinkedIn
+    </a>
+  </div>
+  <div class="pub-links">
+    <a href="https://www.dlnews.com/authors/Osato-Avan-Nomayo/" target="_blank">DL News ↗</a>
+    <a href="https://www.theblock.co/author/osato-avan-nomayo" target="_blank">The Block ↗</a>
+    <a href="https://cointelegraph.com/authors/osato-avan-nomayo" target="_blank">CoinTelegraph ↗</a>
+    <a href="https://beincrypto.com/author/osato/" target="_blank">BeInCrypto ↗</a>
+  </div>
+</div>
+</body>
+</html>
